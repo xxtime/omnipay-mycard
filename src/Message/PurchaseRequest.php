@@ -40,6 +40,10 @@ class PurchaseRequest extends AbstractRequest
     private $customPage = false;
 
 
+    // 是否沙箱模式
+    private $sandboxMode = 'false';
+
+
     public function getEndpoint($type = '')
     {
         $mode = $this->getTestMode() ? 'test' : 'live';
@@ -61,7 +65,7 @@ class PurchaseRequest extends AbstractRequest
             'ProductName'  => $this->getDescription(),
             'Amount'       => $this->getAmount(),
             'Currency'     => $this->getCurrency(),
-            'SandBoxMode'  => $this->getTestMode(),
+            'SandBoxMode'  => $this->sandboxMode,
             'Hash'         => $this->createSign('authCode'),
         ];
         $requestData = array_filter($requestData);
@@ -84,7 +88,7 @@ class PurchaseRequest extends AbstractRequest
                 $preSign =
                     $this->getAppId() . $this->getTransactionId() . $this->getParameter('tradeType') .
                     $this->serverId . $this->customerId . $this->paymentType . $this->itemCode . strtolower(urlencode($this->getDescription())) .
-                    $this->getAmount() . $this->getCurrency() . $this->getTestMode() . $this->getAppKey();
+                    $this->getAmount() . $this->getCurrency() . $this->sandboxMode . $this->getAppKey();
                 break;
         }
         return hash('sha256', $preSign);
@@ -94,6 +98,7 @@ class PurchaseRequest extends AbstractRequest
     public function getData()
     {
         $this->customerId = $this->getTransactionId();
+        $this->sandboxMode = $this->getTestMode() ? 'true' : 'false';
         $data = [
             'authCode'   => $this->requestAuth(),
             'customPage' => $this->customPage
