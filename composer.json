@@ -1,0 +1,37 @@
+{
+  "name": "xxtime/omnipay-mycard",
+  "type": "library",
+  "description": "MyCard gateway for Omnipay payment processing library",
+  "keywords": [
+    "gateway",
+    "merchant",
+    "omnipay",
+    "pay",
+    "payment",
+    "mycard",
+    "purchase"
+  ],
+  "homepage": "https://github.com/xxtime/omnipay-mycard",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Joe",
+      "email": "joe@xxtime.com"
+    },
+    {
+      "name": "Omnipay Contributors",
+      "homepage": "https://github.com/xxtime/omnipay-mycard/contributors"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Omnipay\\MyCard\\": "src/"
+    }
+  },
+  "require": {
+    "omnipay/common": "~2.0"
+  },
+  "require-dev": {
+    "omnipay/tests": "~2.0"
+  }
+}

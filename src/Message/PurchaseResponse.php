@@ -5,24 +5,11 @@ namespace Omnipay\MyCard\Message;
 
 
 use Omnipay\Common\Message\AbstractResponse;
-use Omnipay\Common\Message\RequestInterface;
+use Omnipay\Common\Message\RedirectResponseInterface;
 
 
-class PurchaseResponse extends AbstractResponse
+class PurchaseResponse extends AbstractResponse implements RedirectResponseInterface
 {
-
-
-    protected $request;
-
-
-    protected $data;
-
-
-    public function __construct(RequestInterface $request, $data)
-    {
-        $this->request = $request;
-        $this->data = $data;
-    }
 
 
     public function isSuccessful()
@@ -37,10 +24,21 @@ class PurchaseResponse extends AbstractResponse
     }
 
 
-    public function redirect()
+    public function getRedirectMethod()
     {
-        header('Location:' . $this->data['redirect']);
-        exit;
+        return 'GET';
+    }
+
+
+    public function getRedirectUrl()
+    {
+        return $this->request->getEndpoint('redirect') . '/MyCardPay/?AuthCode=' . $this->data['authCode'];
+    }
+
+
+    public function getRedirectData()
+    {
+        return null;
     }
 
 
@@ -53,11 +51,6 @@ class PurchaseResponse extends AbstractResponse
     public function getTransactionReference()
     {
         return $this->request->getTransactionReference();
-    }
-
-
-    public function getMessage()
-    {
     }
 
 

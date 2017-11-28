@@ -40,7 +40,7 @@ class PurchaseRequest extends AbstractRequest
     private $customPage = false;
 
 
-    protected function getEndpoint($type = '')
+    public function getEndpoint($type = '')
     {
         $mode = $this->getTestMode() ? 'test' : 'live';
         return $this->endpoint[$mode][$type];
@@ -105,7 +105,7 @@ class PurchaseRequest extends AbstractRequest
     public function sendData($data)
     {
         $parameters = [
-            'redirect' => $this->getEndpoint('redirect') . '/MyCardPay/?AuthCode=' . $data['authCode']
+            'authCode' => $data['authCode']
         ];
         return new PurchaseResponse($this, $parameters);
     }
