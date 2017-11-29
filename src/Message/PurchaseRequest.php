@@ -3,7 +3,7 @@
 namespace Omnipay\MyCard\Message;
 
 
-use Exception;
+use Omnipay\MyCard\Exception\DefaultException;
 
 class PurchaseRequest extends AbstractRequest
 {
@@ -54,7 +54,7 @@ class PurchaseRequest extends AbstractRequest
         $httpResponse = $httpRequest->send();
         $body = json_decode($httpResponse->getBody(), true);
         if ($body['ReturnCode'] != 1) {
-            throw new Exception($body['ReturnMsg']);
+            throw new DefaultException($body['ReturnMsg']);
         }
         $this->setTransactionReference($body['TradeSeq']);
         $this->customPage = ($body['InGameSaveType'] == 1) ? true : false;
