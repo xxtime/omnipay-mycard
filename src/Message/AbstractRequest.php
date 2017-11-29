@@ -75,13 +75,30 @@ class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     public function createSign($type = '')
     {
         switch ($type) {
+
             case 'token':
                 $preSign =
                     $this->getAppId() . $this->getTransactionId() . $this->getParameter('tradeType') .
                     $this->serverId . $this->customerId . $this->paymentType . $this->itemCode . strtolower(urlencode($this->getDescription())) .
                     $this->getAmount() . $this->getCurrency() . $this->sandboxMode . $this->getAppKey();
                 break;
+
+            // preHashValue = ReturnCode + PayResult + FacTradeSeq + PaymentType + Amount + Currency + MyCardTradeNo + MyCardType + PromoCode + 廠商的 Key
+            case 'returnHash':
+                $preSign = $this->httpRequest->get('ReturnCode')
+                    . $this->httpRequest->get('PayResult')
+                    . $this->httpRequest->get('FacTradeSeq')
+                    . $this->httpRequest->get('PaymentType')
+                    . $this->httpRequest->get('Amount')
+                    . $this->httpRequest->get('Currency')
+                    . $this->httpRequest->get('MyCardTradeNo')
+                    . $this->httpRequest->get('MyCardType')
+                    . $this->httpRequest->get('PromoCode')
+                    . $this->getAppKey();
+                break;
+
         }
+
         return hash('sha256', $preSign);
     }
 

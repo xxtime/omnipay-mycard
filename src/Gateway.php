@@ -1,10 +1,9 @@
 <?php
 
-
 namespace Omnipay\MyCard;
 
-use Omnipay\Common\AbstractGateway;
 
+use Omnipay\Common\AbstractGateway;
 
 class Gateway extends AbstractGateway
 {
@@ -63,6 +62,12 @@ class Gateway extends AbstractGateway
     public function purchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\MyCard\Message\PurchaseRequest', $parameters);
+    }
+
+
+    public function acceptNotification(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\MyCard\Message\NotificationRequest', $parameters);
     }
 
 
