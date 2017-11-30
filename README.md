@@ -55,15 +55,16 @@ $response = $gateway->purchase(
 )->send();
 
 // Process response
-if ($response->isSuccessful()) {
+if ($response->isRedirect()) {
     // doing something here
-    print_r($response);
-}
-elseif ($response->isRedirect()) {
-    // doing something here
+    // $token = $response->getToken();
     // $data = $response->getData();
     // $transactionReference = $response->getTransactionReference();
     $response->redirect();
+}
+elseif ($response->isSuccessful()) {
+    // doing something here
+    print_r($response);
 }
 else {
     echo $response->getMessage();

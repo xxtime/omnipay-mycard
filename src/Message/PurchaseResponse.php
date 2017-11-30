@@ -32,7 +32,7 @@ class PurchaseResponse extends AbstractResponse implements RedirectResponseInter
 
     public function getRedirectUrl()
     {
-        return $this->request->getEndpoint('redirect') . '/MyCardPay/?AuthCode=' . $this->data['token'];
+        return $this->request->getEndpoint('redirect') . '/MyCardPay/?AuthCode=' . $this->getToken();
     }
 
 
@@ -51,6 +51,12 @@ class PurchaseResponse extends AbstractResponse implements RedirectResponseInter
     public function getTransactionReference()
     {
         return $this->request->getTransactionReference();
+    }
+
+
+    public function getToken()
+    {
+        return $this->request->getToken();
     }
 
 

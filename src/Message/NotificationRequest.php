@@ -33,7 +33,6 @@ class NotificationRequest extends AbstractRequest
 
     public function sendData($data)
     {
-        // TODO :: 查询并确认交易
         return $this->response = new NotificationResponse($this, $data);
     }
 
@@ -75,7 +74,7 @@ class NotificationRequest extends AbstractRequest
         $this->setTransactionId($FacTradeSeq);
         $this->setParameter('code', $ReturnCode);
         $this->setParameter('message', $ReturnMsg);
-        $this->setParameter('raw', $_REQUEST);
+        $this->setParameter('raw', $this->httpRequest->request->all());
     }
 
 

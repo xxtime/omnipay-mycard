@@ -66,19 +66,16 @@ class PurchaseRequest extends AbstractRequest
     {
         $this->customerId = $this->getTransactionId();
         $this->sandboxMode = $this->getTestMode() ? 'true' : 'false';
-        $data = [
-            'token'      => $this->requestToken(),
+        $this->setParameter('token', $this->requestToken());
+        return [
             'customPage' => $this->customPage
         ];
-        return $data;
     }
 
 
-    public function sendData($data)
+    public function sendData($parameters)
     {
-        $parameters = [
-            'token' => $data['token']
-        ];
+        $parameters['token'] = $this->getToken();
         return new PurchaseResponse($this, $parameters);
     }
 
