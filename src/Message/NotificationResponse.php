@@ -5,9 +5,19 @@ namespace Omnipay\MyCard\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\NotificationInterface;
+use Omnipay\MyCard\Exception\DefaultException;
 
 class NotificationResponse extends AbstractResponse implements NotificationInterface
 {
+
+
+    protected $token;
+
+
+    public function setToken($value)
+    {
+        $this->token = $value;
+    }
 
 
     public function isSuccessful()
@@ -37,6 +47,23 @@ class NotificationResponse extends AbstractResponse implements NotificationInter
     public function getMessage()
     {
         return $this->getData()['message'];
+    }
+
+
+    public function accept()
+    {
+        return $this->confirm();
+    }
+
+
+    public function success()
+    {
+        return $this->confirm();
+    }
+
+
+    public function confirm()
+    {
     }
 
 

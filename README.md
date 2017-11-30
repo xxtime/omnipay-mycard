@@ -32,11 +32,11 @@ The following gateways are provided by this package:
 For general usage instructions, please see the main [Omnipay](https://github.com/thephpleague/omnipay)
 repository.
 
-## Basic Usage
+## Usage For Purchase
 
 
 ```php
-// initialize
+// Initialize
 $config = [
     'appId'  => 'MyCard_ServiceId',
     'appKey' => 'MyCard_Key'
@@ -70,6 +70,32 @@ else {
     echo $response->getMessage();
 }
 
+```
+
+
+## Usage For Notify Or Return
+```php
+// Notify
+$config = [
+    'appId'  => 'MyCard_ServiceId',
+    'appKey' => 'MyCard_Key'
+];
+$gateway = Omnipay::create('MyCard');
+$gateway->initialize($config);
+try {
+    $response = $gateway->acceptNotification()->send();
+
+    // set token (which saved when send a purchase @see Usage For Purchase)
+    // $transactionId = $response->getTransactionId();
+    $response->setToken('MyCard_AuthCode');
+
+    // doing something here
+
+    // confirm
+    $response->confirm();
+} catch (\Exception $e) {
+    // failed logs
+}
 ```
 
 

@@ -72,7 +72,7 @@ class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     }
 
 
-    public function createSign($type = '')
+    protected function createSign($type = '')
     {
         switch ($type) {
 

@@ -112,8 +112,7 @@ class NotificationRequest extends AbstractRequest
             throw new DefaultException($data['ReturnMsg']);
         }
 
-        // TODO :: transactionId 当前为数组格式
-        $this->setTransactionId($data['FacTradeSeq']);
+        $this->setTransactionId(array_pop($data['FacTradeSeq'])); // TODO :: 仅处理一条记录
         $this->setParameter('code', $data['ReturnCode']);
         $this->setParameter('message', $data['ReturnMsg']);
         $this->setParameter('raw', $data);
