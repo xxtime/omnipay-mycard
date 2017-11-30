@@ -72,10 +72,10 @@ class NotificationRequest extends AbstractRequest
         }
 
 
+        $this->setTransactionId($FacTradeSeq);
         $this->setParameter('code', $ReturnCode);
         $this->setParameter('message', $ReturnMsg);
         $this->setParameter('raw', $_REQUEST);
-        $this->setTransactionId($FacTradeSeq);
     }
 
 
@@ -113,10 +113,11 @@ class NotificationRequest extends AbstractRequest
             throw new DefaultException($data['ReturnMsg']);
         }
 
+        // TODO :: transactionId 当前为数组格式
+        $this->setTransactionId($data['FacTradeSeq']);
         $this->setParameter('code', $data['ReturnCode']);
         $this->setParameter('message', $data['ReturnMsg']);
         $this->setParameter('raw', $data);
-        $this->setTransactionId($data['FacTradeSeq']);
     }
 
 

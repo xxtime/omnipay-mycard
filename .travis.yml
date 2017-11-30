@@ -1,0 +1,19 @@
+language: php
+
+php:
+  - 5.6
+  - 7.0
+  - 7.1
+
+env:
+  - SYMFONY_VERSION="2.1"
+  - SYMFONY_VERSION="2.*"
+  - SYMFONY_VERSION="3.0"
+  - SYMFONY_VERSION="3.*"
+
+before_script:
+  - composer self-update
+  - composer --version
+  - composer require symfony/http-foundation:${SYMFONY_VERSION} --no-update
+
+script: composer install --prefer-dist --no-interaction

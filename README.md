@@ -75,6 +75,7 @@ else {
 ## Related
 
 [Project Home Page](https://github.com/xxtime/omnipay-mycard)  
+[About Usage](https://www.ctolib.com/omnipay.html)  
 [MyCard Official Website](https://www.mycard520.com.tw)  
 
 
