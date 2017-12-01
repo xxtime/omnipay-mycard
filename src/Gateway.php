@@ -71,4 +71,9 @@ class Gateway extends AbstractGateway
     }
 
 
+    public function fetchTransaction(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\MyCard\Message\FetchRequest', $parameters);
+    }
+
 }

@@ -99,6 +99,22 @@ try {
 ```
 
 
+## Usage For Query
+```php
+$gateway = Omnipay::create('MyCard');
+$gateway->initialize($config);
+$response = $gateway->fetchTransaction(['token' => 'MyCard_AuthCode'])->send();
+// further functions below
+$response->isSuccessful();
+$response->getTransactionId();
+$response->getAmount();
+$response->getCurrency();
+$response->getCard();           // card number
+$response->getMessage();        // message response from MyCard query api
+$response->getData();           // output RAW data
+```
+
+
 ## Related
 
 [Project Home Page](https://github.com/xxtime/omnipay-mycard)  
