@@ -4,6 +4,7 @@ namespace Omnipay\MyCard;
 
 
 use Omnipay\Common\AbstractGateway;
+use Omnipay\MyCard\Message\compareTransaction;
 
 class Gateway extends AbstractGateway
 {
@@ -74,6 +75,14 @@ class Gateway extends AbstractGateway
     public function fetchTransaction(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\MyCard\Message\FetchRequest', $parameters);
+    }
+
+
+    public function compareTransaction(array $parameters = array())
+    {
+        $object = new compareTransaction();
+        $object->setData($parameters);
+        $object->output();
     }
 
 }
