@@ -93,6 +93,10 @@ try {
 
     // confirm
     $response->confirm();
+    
+    // get more transaction
+    // you should save the info for further compare
+    // $response->getData();
 } catch (\Exception $e) {
     // failed logs
 }
@@ -112,6 +116,34 @@ $response->getCurrency();
 $response->getCard();           // card number
 $response->getMessage();        // message response from MyCard query api
 $response->getData();           // output RAW data
+```
+
+
+## Usage For Compare
+
+```php
+$compare = $gateway->compareTransaction();
+
+// Get Params, Exp: ["card"=>"MC123456"] or ["startTime"=>1500000000,"endTime"=>1560000000];
+$params = $compare->getParams();
+
+// Get data from database with the $params above
+$data = [
+    [
+        'type'                 => 'INGAME',         // INGAME, COSTPOINT Or Something Else
+        'transactionId'        => '12345678',       // My Transaction Id
+        'transactionReference' => 'MC973924',       // MyCard Transaction Id
+        'card'                 => 'card number',    // Card Number Or Something Else
+        'amount'               => '50.00',          // Amount
+        'currency'             => 'TWD',            // Currency
+        'account'              => 'user123',        // User Id
+        'time'                 => 1500000000,       // Timestamp
+    ],
+    // ... more
+];
+
+// Output data
+$compare->setData($data)->send();
 ```
 
 

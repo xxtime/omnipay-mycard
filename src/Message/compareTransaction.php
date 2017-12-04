@@ -6,17 +6,49 @@
 namespace Omnipay\MyCard\Message;
 
 
+use DateTime;
+use DateTimeZone;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+
 class compareTransaction
 {
 
     protected $data;
 
 
+    protected $allowedIp = [
+        '210.71.189.165',
+        '218.32.37.148',
+    ];
+
+
+    protected $httpRequest;
+
+
+    public function __construct()
+    {
+        $this->httpRequest = HttpRequest::createFromGlobals();
+        if (!in_array($this->httpRequest->getClientIp(), $this->allowedIp)) {
+            $this->error();
+        }
+    }
+
+
+    public function getParams()
+    {
+        return [
+            'card'      => $this->httpRequest->get('MyCardTradeNo'),
+            'startTime' => strtotime($this->httpRequest->get('StartDateTime')),
+            'endTime'   => strtotime($this->httpRequest->get('EndDateTime')),
+        ];
+    }
+
+
     /**
-     * 参考格式:
-     *
+     * 设置数据
      * $data = [
      *     [
+     *          'type'                 => 'INGAME',
      *          'transactionId'        => '厂商交易号',
      *          'transactionReference' => 'MyCard交易号',
      *          'card'                 => 'MC341432533',
@@ -26,28 +58,44 @@ class compareTransaction
      *          'time'                 => 1500000000,
      *     ]
      * ]
+     *
      * @param array $data
+     * @return $this
      */
     public function setData(array $data = [])
     {
-        // TODO :: INGAME and 时区问题
+        $dateTime = new DateTime();
+        $dateTime->setTimezone(new DateTimeZone('Asia/Taipei'));
+
         foreach ($data as $value) {
-            $this->data .= "INGAME," .
+            $dateTime->setTimestamp($value['time']);
+            // INGAME   : 卡片儲值
+            // COSTPOINT: 會員扣點
+            // (Billing): 其他代碼為小額付費之付費方式
+            $this->data .=
+                $value['type'] . ',' .
                 $value['transactionReference'] . ',' .
                 $value['card'] . ',' .
                 $value['transactionId'] . ',' .
                 $value['account'] . ',' .
                 $value['amount'] . ',' .
                 $value['currency'] . ',' .
-                date('Y-m-d\TH:i:s', $value['time']) .
-                '<BR>';
+                $dateTime->format('Y-m-d\TH:i:s') .
+                "<BR>\r\n";
         };
+        return $this;
     }
 
 
-    public function output()
+    public function send()
     {
         exit($this->data);
+    }
+
+
+    public function error()
+    {
+        exit('IP Not Allowed');
     }
 
 

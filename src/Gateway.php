@@ -78,11 +78,9 @@ class Gateway extends AbstractGateway
     }
 
 
-    public function compareTransaction(array $parameters = array())
+    public function compareTransaction()
     {
-        $object = new compareTransaction();
-        $object->setData($parameters);
-        $object->output();
+        return new compareTransaction();
     }
 
 }
