@@ -18,14 +18,17 @@ class NotificationRequest extends AbstractRequest
     {
         if ($this->httpRequest->get('DATA')) {
             $this->getNotifyParams();
+            $type = 'notify';
         }
         else {
             $this->getReturnParams();
+            $type = 'return';
         }
         return [
             'code'          => $this->getParameter('code'),
             'message'       => $this->getParameter('message'),
             'transactionId' => $this->getTransactionId(),
+            'type'          => $type,
             'raw'           => $this->getParameter('raw')
         ];
     }

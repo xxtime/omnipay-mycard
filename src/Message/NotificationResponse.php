@@ -15,6 +15,9 @@ class NotificationResponse extends AbstractResponse implements NotificationInter
     protected $token;
 
 
+    protected $httpClient;
+
+
     public function setToken($value)
     {
         $this->token = $value;
@@ -65,7 +68,21 @@ class NotificationResponse extends AbstractResponse implements NotificationInter
 
     public function confirm()
     {
+        $this->httpClient = new HttpClient('', array('curl.options' => array(CURLOPT_CONNECTTIMEOUT => 60)));
+        $this->data['raw'] = $this->fetchTransaction(); // type=return时, 与raw携带过来的格式相同
         return $this->confirmTransaction();
+    }
+
+
+    // 参考 \Omnipay\MyCard\Message\FetchRequest
+    private function fetchTransaction()
+    {
+        $endpoint = $this->request->getEndpoint('b2b') . '/MyBillingPay/api/TradeQuery';
+        $requestData = [
+            'AuthCode' => $this->token
+        ];
+        $response = $this->httpClient->post($endpoint, null, $requestData)->send();
+        return json_decode($response->getBody(), true);
     }
 
 
@@ -73,12 +90,11 @@ class NotificationResponse extends AbstractResponse implements NotificationInter
     // 注意: 二次扣款也会失败
     private function confirmTransaction()
     {
-        $httpClient = new HttpClient('', array('curl.options' => array(CURLOPT_CONNECTTIMEOUT => 60)));
         $endpoint = $this->request->getEndpoint('b2b') . '/MyBillingPay/api/PaymentConfirm';
         $requestData = [
             'AuthCode' => $this->token
         ];
-        $response = $httpClient->post($endpoint, null, $requestData)->send();
+        $response = $this->httpClient->post($endpoint, null, $requestData)->send();
         $data = json_decode($response->getBody(), true);
         if ($data['ReturnCode'] != 1) {
             throw new DefaultException($data['ReturnMsg']);
