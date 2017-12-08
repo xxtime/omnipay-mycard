@@ -1,5 +1,12 @@
 # Omnipay: MyCard
 
+
+[![Latest Stable Version](https://poser.pugx.org/xxtime/omnipay-mycard/v/stable)](https://packagist.org/packages/xxtime/omnipay-mycard)
+[![Build Status](https://travis-ci.org/xxtime/omnipay-mycard.svg?branch=master)](https://travis-ci.org/xxtime/omnipay-mycard)
+[![Total Downloads](https://poser.pugx.org/xxtime/omnipay-mycard/downloads)](https://packagist.org/packages/xxtime/omnipay-mycard)
+[![License](https://poser.pugx.org/xxtime/omnipay-mycard/license)](https://packagist.org/packages/xxtime/omnipay-mycard)
+
+
 **MyCard driver for the Omnipay PHP payment processing library**
 
 [Omnipay](https://github.com/thephpleague/omnipay) is a framework agnostic, multi-gateway payment
