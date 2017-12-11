@@ -15,5 +15,16 @@ before_script:
   - composer self-update
   - composer --version
   - composer require symfony/http-foundation:${SYMFONY_VERSION} --no-update
+  - composer install --prefer-dist --no-interaction
 
-script: composer install --prefer-dist --no-interaction
+script:
+  - phpunit --coverage-text --coverage-clover=coverage.clover
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+
+notifications:
+  email:
+    - joe@xxtime.com
+    - cnfeeling@gmail.com
