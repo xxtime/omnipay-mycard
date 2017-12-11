@@ -4,6 +4,7 @@
 [![Latest Stable Version](https://poser.pugx.org/xxtime/omnipay-mycard/v/stable)](https://packagist.org/packages/xxtime/omnipay-mycard)
 [![Build Status](https://travis-ci.org/xxtime/omnipay-mycard.svg?branch=master)](https://travis-ci.org/xxtime/omnipay-mycard)
 [![Total Downloads](https://poser.pugx.org/xxtime/omnipay-mycard/downloads)](https://packagist.org/packages/xxtime/omnipay-mycard)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/xxtime/omnipay-mycard/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/xxtime/omnipay-mycard/?branch=master)
 [![License](https://poser.pugx.org/xxtime/omnipay-mycard/license)](https://packagist.org/packages/xxtime/omnipay-mycard)
 
 

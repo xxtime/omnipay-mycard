@@ -1,5 +1,7 @@
-/vendor
+.idea/*
+.travis.yml
+.scrutinizer.yml
 composer.lock
 composer.phar
-phpunit.xml
-.idea/*
+phpunit.xml.dist
+/vendor

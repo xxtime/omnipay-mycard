@@ -74,6 +74,8 @@ class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     protected function createSign($type = '')
     {
+        $preSign = '';
+
         switch ($type) {
 
             case 'token':
