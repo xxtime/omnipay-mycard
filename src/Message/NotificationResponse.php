@@ -3,10 +3,8 @@
 namespace Omnipay\MyCard\Message;
 
 
-use Omnipay\MyCard\Exception\DefaultException;
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\NotificationInterface;
-use Guzzle\Http\Client as HttpClient;
 
 class NotificationResponse extends AbstractResponse implements NotificationInterface
 {
@@ -15,7 +13,7 @@ class NotificationResponse extends AbstractResponse implements NotificationInter
     protected $token;
 
 
-    protected $httpClient;
+    protected $status;
 
 
     public function setToken($value)
@@ -26,7 +24,7 @@ class NotificationResponse extends AbstractResponse implements NotificationInter
 
     public function isSuccessful()
     {
-        return $this->getData()['code'] == 1 ? true : false;
+        return $this->status == static::STATUS_COMPLETED;
     }
 
 
@@ -44,7 +42,7 @@ class NotificationResponse extends AbstractResponse implements NotificationInter
 
     public function getTransactionStatus()
     {
-        return $this->getData()['code'] == 1 ? 'completed' : 'failed';
+        return $this->status;
     }
 
 
@@ -68,38 +66,24 @@ class NotificationResponse extends AbstractResponse implements NotificationInter
 
     public function confirm()
     {
-        $this->httpClient = new HttpClient('', array('curl.options' => array(CURLOPT_CONNECTTIMEOUT => 60)));
-        $this->data['raw'] = $this->fetchTransaction(); // type=return时, 与raw携带过来的格式相同
-        return $this->confirmTransaction();
-    }
-
-
-    // 参考 \Omnipay\MyCard\Message\FetchRequest
-    private function fetchTransaction()
-    {
-        $endpoint = $this->request->getEndpoint('b2b') . '/MyBillingPay/api/TradeQuery';
-        $requestData = [
-            'AuthCode' => $this->token
-        ];
-        $response = $this->httpClient->post($endpoint, null, $requestData)->send();
-        return json_decode($response->getBody(), true);
-    }
-
-
-    // docs: 3.4 確認 MyCard 交易，並進行請款(Server to Server)
-    // 注意: 二次扣款也会失败
-    private function confirmTransaction()
-    {
-        $endpoint = $this->request->getEndpoint('b2b') . '/MyBillingPay/api/PaymentConfirm';
-        $requestData = [
-            'AuthCode' => $this->token
-        ];
-        $response = $this->httpClient->post($endpoint, null, $requestData)->send();
-        $data = json_decode($response->getBody(), true);
-        if ($data['ReturnCode'] != 1) {
-            throw new DefaultException($data['ReturnMsg']);
+        // 查询
+        $fetchResponse = $this->request->fetchTransaction($this->token);
+        $this->data['raw'] = $fetchResponse->getData();
+        if ($fetchResponse->getData()['PayResult'] != 3) { // 交易成功為3; 交易失敗為0;
+            $this->status = static::STATUS_FAILED;
         }
-        return true;
+        else {
+            $this->status = static::STATUS_COMPLETED;
+        }
+
+
+        // 确认订单
+        $confirmResponse = $this->request->confirmTransaction();
+        if ($confirmResponse->getData()['ReturnCode'] == 1) {
+            // TODO :: 二次确认会失败
+            // $this->status = static::STATUS_COMPLETED;
+        }
+        return $this;
     }
 
 

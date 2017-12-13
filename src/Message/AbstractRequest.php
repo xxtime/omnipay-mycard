@@ -7,6 +7,22 @@ namespace Omnipay\MyCard\Message;
 class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
 
+    // 用戶在廠商端的伺服器編號,不可輸入中文
+    protected $serverId = '';
+
+
+    // 用戶在廠商端的會員唯一識別編號
+    protected $accountId = '';
+
+
+    // 付費方式: 此參數非必填，參數為空時將依 交易金額(Amount)和幣別 (Currency)判斷可用的付費方式 呈現給用戶選擇
+    protected $paymentType = '';
+
+
+    // 品項代碼: 此參數非必填，參數為空時將依 交易金額(Amount)和幣別 (Currency)判斷可用的付費方式 呈現給用戶選擇
+    protected $itemCode = '';
+
+
     protected $endpoint = [
         'live' => [
             'b2b'      => 'https://b2b.mycard520.com.tw',
@@ -50,6 +66,12 @@ class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     }
 
 
+    public function setAmount($value)
+    {
+        return $this->setParameter('amount', sprintf('%.2f', $value), $value);
+    }
+
+
     public function getTradeType()
     {
         return $this->getParameter('tradeType');
@@ -62,6 +84,54 @@ class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     }
 
 
+    public function getServerId()
+    {
+        return $this->getParameter('serverId');
+    }
+
+
+    public function setServerId($value)
+    {
+        return $this->setParameter('serverId', $value);
+    }
+
+
+    public function getAccountId()
+    {
+        return $this->getParameter('accountId');
+    }
+
+
+    public function setAccountId($value)
+    {
+        return $this->setParameter('accountId', $value);
+    }
+
+
+    public function getPaymentType()
+    {
+        return $this->getParameter('paymentType');
+    }
+
+
+    public function setPaymentType($value)
+    {
+        return $this->setParameter('paymentType', $value);
+    }
+
+
+    public function getItemCode()
+    {
+        return $this->getParameter('itemCode');
+    }
+
+
+    public function setItemCode($value)
+    {
+        return $this->setParameter('itemCode', $value);
+    }
+
+
     public function getData()
     {
     }
@@ -69,47 +139,6 @@ class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     public function sendData($data)
     {
-    }
-
-
-    protected function createSign($type = '')
-    {
-        $preSign = '';
-
-        switch ($type) {
-
-            case 'token':
-                $preSign =
-                    $this->getAppId() .
-                    $this->getTransactionId() .
-                    $this->getParameter('tradeType') .
-                    $this->serverId .
-                    $this->customerId .
-                    $this->paymentType .
-                    $this->itemCode .
-                    strtolower(urlencode($this->getDescription())) .
-                    $this->getAmount() .
-                    $this->getCurrency() .
-                    $this->sandboxMode .
-                    $this->getAppKey();
-                break;
-
-            case 'returnHash':
-                $preSign = $this->httpRequest->get('ReturnCode') .
-                    $this->httpRequest->get('PayResult') .
-                    $this->httpRequest->get('FacTradeSeq') .
-                    $this->httpRequest->get('PaymentType') .
-                    $this->httpRequest->get('Amount') .
-                    $this->httpRequest->get('Currency') .
-                    $this->httpRequest->get('MyCardTradeNo') .
-                    $this->httpRequest->get('MyCardType') .
-                    $this->httpRequest->get('PromoCode') .
-                    $this->getAppKey();
-                break;
-
-        }
-
-        return hash('sha256', $preSign);
     }
 
 }

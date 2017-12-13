@@ -50,14 +50,14 @@ class NotificationRequest extends AbstractRequest
         $ReturnMsg = $this->httpRequest->get('ReturnMsg');
         $PayResult = $this->httpRequest->get('PayResult');          // 交易结果代码 交易成功为 3; 交易失败为 0
         $FacTradeSeq = $this->httpRequest->get('FacTradeSeq');      // 厂商交易序号
-        $PaymentType = $this->httpRequest->get('PaymentType');      // 付费方式
-        $Amount = $this->httpRequest->get('Amount');
-        $Currency = $this->httpRequest->get('Currency');
-        $MyCardType = $this->httpRequest->get('MyCardType');        // 通路代码 PaymentType = INGAME 时才有值
-        $PromoCode = $this->httpRequest->get('PromoCode');          // 活动代码
-        $Hash = $this->httpRequest->get('Hash');                    // 验证码
+        // $PaymentType = $this->httpRequest->get('PaymentType');      // 付费方式
+        // $Amount = $this->httpRequest->get('Amount');
+        // $Currency = $this->httpRequest->get('Currency');
+        // $MyCardType = $this->httpRequest->get('MyCardType');        // 通路代码 PaymentType = INGAME 时才有值
+        // $PromoCode = $this->httpRequest->get('PromoCode');          // 活动代码
+        // $Hash = $this->httpRequest->get('Hash');                    // 验证码
         // 1.PaymentType=INGAME时，传MyCard卡片号码; 2.PaymentType=COSTPOINT时，传会员扣点交易序号，格式为MMS开头+数; 3.其余PaymentType为Billing小额付款交易，传Billing交易序号
-        $MyCardTradeNo = $this->httpRequest->get('MyCardTradeNo');
+        // $MyCardTradeNo = $this->httpRequest->get('MyCardTradeNo');
 
 
         // 检查
@@ -68,8 +68,12 @@ class NotificationRequest extends AbstractRequest
             throw new DefaultException($ReturnMsg);
         }
 
+
+        $token = new TokenRequest($this->httpClient, $this->httpRequest);
+        $token->initialize($this->getParameters());
+
         // 签名验证
-        if ($this->createSign('returnHash') != $this->httpRequest->get('Hash')) {
+        if ($token->getSign('returnHash') != $this->httpRequest->get('Hash')) {
             throw new DefaultException('Sign Error');
         }
 
@@ -121,5 +125,29 @@ class NotificationRequest extends AbstractRequest
         $this->setParameter('raw', $data);
     }
 
+
+    // 参考 \Omnipay\MyCard\Message\FetchRequest
+    public function fetchTransaction($token = '')
+    {
+        $this->response = null;
+        $this->setToken($token);
+        $fetchRequest = new FetchRequest($this->httpClient, $this->httpRequest);
+        $fetchRequest->initialize($this->getParameters());
+        return $fetchRequest->send();
+    }
+
+
+    // docs: 3.4 確認 MyCard 交易，並進行請款(Server to Server)
+    // 注意: 二次扣款也会失败
+    public function confirmTransaction()
+    {
+        $this->response = null;
+        if (!$this->getToken()) {
+            return false;
+        }
+        $confirmRequest = new ConfirmRequest($this->httpClient, $this->httpRequest);
+        $confirmRequest->initialize($this->getParameters());
+        return $confirmRequest->send();
+    }
 
 }
