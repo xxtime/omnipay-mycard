@@ -14,7 +14,7 @@ class TokenRequest extends AbstractRequest
             'FacServiceId' => $this->getAppId(),
             'FacTradeSeq'  => $this->getTransactionId(),
             'TradeType'    => $this->getTradeType(),
-            'ServerId'     => $this->getServerId() ?: '',                                  // 服务器ID
+            'ServerId'     => $this->getServerId() ?: '',                         // 服务器ID
             'CustomerId'   => $this->getAccountId() ?: $this->getTransactionId(), // 用户ID
             'PaymentType'  => $this->getPaymentType() ?: '',
             'ItemCode'     => $this->getItemCode() ?: '',

@@ -81,7 +81,7 @@ class NotificationRequest extends AbstractRequest
         $this->setTransactionId($FacTradeSeq);
         $this->setParameter('code', $ReturnCode);
         $this->setParameter('message', $ReturnMsg);
-        $this->setParameter('raw', $this->httpRequest->request->all());
+        $this->setParameter('raw', $this->httpRequest->request->all() + $this->httpRequest->query->all());
     }
 
 

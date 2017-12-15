@@ -8,9 +8,10 @@ namespace Omnipay\MyCard\Message;
 
 use DateTime;
 use DateTimeZone;
+use Omnipay\MyCard\Exception\DefaultException;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
-class compareTransaction
+class CompareTransaction
 {
 
     protected $data;
@@ -46,6 +47,7 @@ class compareTransaction
 
     /**
      * 设置数据
+     * INGAME: 卡片儲值; COSTPOINT: 會員扣點; (Billing): 其他代碼為小額付費之付費方式
      * $data = [
      *     [
      *          'type'                 => 'INGAME',
@@ -69,9 +71,6 @@ class compareTransaction
 
         foreach ($data as $value) {
             $dateTime->setTimestamp($value['time']);
-            // INGAME   : 卡片儲值
-            // COSTPOINT: 會員扣點
-            // (Billing): 其他代碼為小額付費之付費方式
             $this->data .=
                 $value['type'] . ',' .
                 $value['transactionReference'] . ',' .
@@ -95,7 +94,7 @@ class compareTransaction
 
     public function error()
     {
-        exit('IP Not Allowed');
+        throw new DefaultException('IP Not Allowed');
     }
 
 

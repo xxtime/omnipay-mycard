@@ -4,7 +4,7 @@ namespace Omnipay\MyCard;
 
 
 use Omnipay\Common\AbstractGateway;
-use Omnipay\MyCard\Message\compareTransaction;
+use Omnipay\MyCard\Message\CompareTransaction;
 
 class Gateway extends AbstractGateway
 {
@@ -80,7 +80,7 @@ class Gateway extends AbstractGateway
 
     public function compareTransaction()
     {
-        return new compareTransaction();
+        return new CompareTransaction();
     }
 
 }

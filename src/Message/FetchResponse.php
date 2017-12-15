@@ -41,7 +41,7 @@ class FetchResponse extends AbstractResponse
     }
 
 
-    public function getCard()
+    public function getCardNumber()
     {
         return $this->getData()['MyCardTradeNo'];
     }

@@ -32,6 +32,7 @@
     "omnipay/common": "~2.0"
   },
   "require-dev": {
+    "illuminate/support": "~v5.4",
     "omnipay/tests": "~2.0"
   }
 }

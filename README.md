@@ -121,7 +121,7 @@ $response->isSuccessful();
 $response->getTransactionId();
 $response->getAmount();
 $response->getCurrency();
-$response->getCard();           // card number
+$response->getCardNumber();     // card number
 $response->getMessage();        // message response from MyCard query api
 $response->getData();           // output RAW data
 ```
