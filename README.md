@@ -21,7 +21,7 @@ to your `composer.json` file:
 ```json
 {
     "require": {
-        "xxtime/omnipay-mycard": "~1.0"
+        "xxtime/omnipay-mycard": "~1.1"
     }
 }
 ```
@@ -96,15 +96,13 @@ try {
     // set token (which saved when send a purchase @see Usage For Purchase)
     // $transactionId = $response->getTransactionId();
     $response->setToken('MyCard_AuthCode');
-
-    // doing something here
-
     // confirm
     $response->confirm();
-    
-    // get more transaction
-    // you should save the info for further compare
-    // $response->getData();
+    if ($response->isSuccessful()) {
+        // doing something here
+        // save $response->getData()['confirmData'] for further compare
+        // $data = $response->getData();
+    }
 } catch (\Exception $e) {
     // failed logs
 }

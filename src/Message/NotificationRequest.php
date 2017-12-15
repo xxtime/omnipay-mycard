@@ -29,7 +29,7 @@ class NotificationRequest extends AbstractRequest
             'message'       => $this->getParameter('message'),
             'transactionId' => $this->getTransactionId(),
             'type'          => $type,
-            'raw'           => $this->getParameter('raw')
+            'notifyData'    => $this->getParameter('raw')
         ];
     }
 
